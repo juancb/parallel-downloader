@@ -7,8 +7,8 @@ start=0
 last=$start
 chunks=30
 step=$(($content_length / $chunks))
-counter=0
-TMP_DIR=/tmp/parallel-curl
+counter=1
+TMP_DIR=/tmp/parallecl-curl
 
 if [ ! -e $TMP_DIR ]; then
     mkdir $TMP_DIR
@@ -24,12 +24,15 @@ while [ $last -lt $content_length ]; do
     counter=$(($counter + 1))
 done
 
+# Wait for all downloads to finish before reassembling the file
+wait
+
 # Reassemble our file
 if [ -e $output_file ]; then
     echo "output file $outpuf_file exists! CLOBBERING $output_file"
     rm $output_file
 fi
-for i in `seq 0 \`ls $TMP_DIR/${output_file}*.[0-9]*| wc -l\``; do
+for i in `seq 1 \`ls $TMP_DIR/${output_file}*.[0-9]*| wc -l\``; do
     cat $TMP_DIR/${output_file}.$i >> $output_file;
 done
 
