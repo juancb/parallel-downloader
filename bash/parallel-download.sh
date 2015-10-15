@@ -1,4 +1,9 @@
-#!/bin/bash 
+#!/bin/bash
+#
+# BASH parallel downloader
+#
+# Juan C. Bran <juancb@gmail.com>
+# 
 
 content_length=`curl -I $1 | grep Content-Length | awk '{print $NF}' | tr -d '\r'`
 output_file=`echo $1 | awk -F/ '{print $NF}'`
